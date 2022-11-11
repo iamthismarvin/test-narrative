@@ -1,14 +1,13 @@
 <template>
-  <header>
-    <NavigationMenu />
-  </header>
-
-  <RouterView />
+  <div>
+    <component :is="route.meta.layout || 'div'">
+      <RouterView />
+    </component>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { RouterView } from 'vue-router'
-import NavigationMenu from '@/components/NavigationMenu.vue'
-</script>
+import { RouterView, useRoute } from 'vue-router'
 
-<style scoped></style>
+const route = useRoute()
+</script>
