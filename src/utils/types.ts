@@ -1,4 +1,4 @@
-export interface IBuyOrderApi {
+export interface IBuyOrder {
   id: string
   name: string
   createdAt: string
@@ -13,7 +13,13 @@ export interface IBuyOrderListItem {
   records: number
 }
 
-export interface IDatasetsApi {
+export interface ICountry {
+  name: string
+  countryCode: string
+  storeData: { datasetId: number; recordCount: number }[]
+}
+
+export interface IDataset {
   id: number
   name: string
   label: string
@@ -21,3 +27,7 @@ export interface IDatasetsApi {
   thumbnailUrl: string
   costPerRecord: number
 }
+
+export type BuyOrdersResponse = IBuyOrder[] | undefined
+export type CountriesResponse = ICountry[] | undefined
+export type DatasetsResponse = IDataset[] | undefined

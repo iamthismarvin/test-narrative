@@ -13,14 +13,14 @@
 <script setup lang="ts">
 import { computed, type ComputedRef, type PropType } from 'vue'
 import BuyOrdersListItem from '@/components/BuyOrdersListItem.vue'
-import type { IBuyOrderApi, IBuyOrderListItem } from '@/utils/types'
+import type { IBuyOrder, IBuyOrderListItem } from '@/utils/types'
 
 const props = defineProps({
-  data: { type: Array as PropType<IBuyOrderApi[]>, required: true },
+  data: { type: Array as PropType<IBuyOrder[]>, required: true },
 })
 
 const buyOrdersFormatted: ComputedRef<IBuyOrderListItem[]> = computed(() =>
-  props.data.map((buyOrder: IBuyOrderApi) => ({
+  props.data.map((buyOrder: IBuyOrder) => ({
     name: buyOrder.name,
     date: buyOrder.createdAt,
     records: buyOrder.budget,

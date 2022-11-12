@@ -25,9 +25,9 @@
 
 <script setup lang="ts">
 import type { PropType } from 'vue'
-import type { IDatasetsApi } from '@/utils/types'
+import type { IDataset } from '@/utils/types'
 
 const props = defineProps({
-  data: { type: Object as PropType<IDatasetsApi>, required: true },
+  data: { type: Object as PropType<IDataset>, required: true },
 })
 </script>
