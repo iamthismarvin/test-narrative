@@ -1,5 +1,7 @@
 <template>
-  <section class="p-5 my-5 rounded shadow">
+  <section
+    class="fixed bg-white bottom-1 left-1/2 p-5 my-5 rounded-xl shadow -translate-x-1/2"
+  >
     <h5>Included Countries:</h5>
     <ul class="flex mt-2">
       <li
@@ -9,7 +11,7 @@
       >
         <button
           @click="filterCountry(countryCode)"
-          class="p-3 rounded w-40"
+          class="p-3 rounded-xl w-40"
           :class="[
             selectedCountries.includes(countryCode)
               ? 'bg-blue-500 text-white'

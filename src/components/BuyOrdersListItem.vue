@@ -1,15 +1,15 @@
 <template>
-  <div class="bg-gray-200 grid grid-cols-3 min-h-[6rem]">
+  <div class="bg-white grid grid-cols-3 min-h-[6rem] p-5 rounded-xl shadow">
     <div>
-      <p>Order Name</p>
+      <h5>Order Name</h5>
       <p>{{ props.name }}</p>
     </div>
     <div>
-      <p>Date Created</p>
+      <h5>Date Created</h5>
       <p>{{ props.date }}</p>
     </div>
     <div>
-      <p>Forecasted Records</p>
+      <h5>Forecasted Records</h5>
       <p>{{ props.records }} records</p>
     </div>
   </div>

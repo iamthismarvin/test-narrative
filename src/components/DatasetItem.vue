@@ -1,10 +1,10 @@
 <template>
-  <div class="bg-gray-200 h-96 p-8">
+  <div class="bg-white h-96 p-8 rounded-xl shadow">
     <div class="flex items-center justify-between mb-6">
       <img
         :src="props.data.thumbnailUrl"
         :alt="props.data.name"
-        class="bg-blue-300 h-24 min-w-[6rem] w-24"
+        class="bg-blue-300 h-24 min-w-[6rem] rounded-full w-24"
       />
       <h3 class="capitalize text-center w-full">{{ props.data.name }}</h3>
     </div>

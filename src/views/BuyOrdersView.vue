@@ -2,7 +2,11 @@
   <h1>Your Buy Orders</h1>
   <div v-if="isLoading">Loading buy orders...</div>
   <div v-else>
-    <ResultsText :quantity="resultsQuantity" :countries="resultsCountries" />
+    <ResultsText
+      :quantity="resultsQuantity"
+      :countries="resultsCountries"
+      class="mb-2"
+    />
     <BuyOrdersList v-if="buyOrdersData" :data="buyOrdersData" />
     <div v-else>No buy orders found.</div>
   </div>

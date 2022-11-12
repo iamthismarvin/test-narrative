@@ -2,7 +2,11 @@
   <h1>Datasets</h1>
   <div v-if="isLoading">Loading datasets...</div>
   <div v-else>
-    <ResultsText :quantity="resultsQuantity" :countries="resultsCountries" />
+    <ResultsText
+      :quantity="resultsQuantity"
+      :countries="resultsCountries"
+      class="mb-2"
+    />
     <ul v-if="datasets" class="grid grid-cols-2 gap-4">
       <li v-for="dataset in datasets" :key="dataset.name">
         <DatasetItem :data="dataset" />
