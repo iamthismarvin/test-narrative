@@ -15,17 +15,18 @@
 import { computed, onBeforeMount, ref, type Ref } from 'vue'
 import DatasetItem from '@/components/DatasetItem.vue'
 import ResultsText from '@/components/ResultsText.vue'
-import type { DatasetsResponse } from '@/utils/types'
+import type { IDataset } from '@/utils/types'
 import { getDatasets } from '@/services/datasets'
 
 const isLoading = ref(false)
-const datasets: Ref<DatasetsResponse> = ref([])
+const datasets: Ref<IDataset[]> = ref([])
 const resultsCountries = ref(['United States', 'Canada'])
-const resultsQuantity = computed(() => datasets.value?.length ?? 0)
+const resultsQuantity = computed(() => datasets.value.length)
 
 onBeforeMount(async () => {
   isLoading.value = true
-  datasets.value = await getDatasets()
+  const data = await getDatasets()
+  if (data) datasets.value = data
   isLoading.value = false
 })
 </script>

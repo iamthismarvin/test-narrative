@@ -12,17 +12,18 @@
 import { computed, onBeforeMount, ref, type Ref } from 'vue'
 import BuyOrdersList from '@/components/BuyOrdersList.vue'
 import ResultsText from '@/components/ResultsText.vue'
-import type { BuyOrdersResponse } from '@/utils/types'
+import type { IBuyOrder } from '@/utils/types'
 import { getBuyOrders } from '@/services/buy-orders'
 
 const isLoading = ref(false)
-const buyOrdersData: Ref<BuyOrdersResponse> = ref([])
-const resultsQuantity = computed(() => buyOrdersData.value?.length ?? 0)
+const buyOrdersData: Ref<IBuyOrder[]> = ref([])
+const resultsQuantity = computed(() => buyOrdersData.value.length)
 const resultsCountries = ref(['United States', 'Canada', 'Mexico'])
 
 onBeforeMount(async () => {
   isLoading.value = true
-  buyOrdersData.value = await getBuyOrders()
+  const data = await getBuyOrders()
+  if (data) buyOrdersData.value = data
   isLoading.value = false
 })
 </script>
