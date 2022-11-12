@@ -18,7 +18,7 @@
     </div>
     <div class="flex justify-between">
       <h5>Available Records</h5>
-      <p>EXAMPLE</p>
+      <p>{{ getDatasetRecordCount(props.data.id) }}</p>
     </div>
   </div>
 </template>
@@ -26,8 +26,11 @@
 <script setup lang="ts">
 import type { PropType } from 'vue'
 import type { IDataset } from '@/utils/types'
+import { useCountriesStore } from '@/stores/countries'
 
 const props = defineProps({
   data: { type: Object as PropType<IDataset>, required: true },
 })
+
+const { getDatasetRecordCount } = useCountriesStore()
 </script>

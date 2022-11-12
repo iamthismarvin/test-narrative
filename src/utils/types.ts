@@ -16,7 +16,7 @@ export interface IBuyOrderListItem {
 export interface ICountry {
   name: string
   countryCode: string
-  storeData: { datasetId: number; recordCount: number }[]
+  storedData: { datasetId: number; recordCount: number }[]
 }
 
 export interface IDataset {

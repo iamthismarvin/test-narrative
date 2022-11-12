@@ -1,4 +1,4 @@
-import { ref, type Ref } from 'vue'
+import { computed, ref, type Ref } from 'vue'
 import { defineStore } from 'pinia'
 import type { ICountry } from '@/utils/types'
 import { getCountries } from '@/services/countries'
@@ -28,14 +28,31 @@ export const useCountriesStore = defineStore('countries', () => {
   const getCountryFromCode = (countryCode: string) =>
     availableCountries.value.find((c) => c.countryCode === countryCode)?.name ??
     ''
+  const getCountryRecordCount = (countryCode: string) =>
+    availableCountries.value.find((c) => c.countryCode === countryCode)
+      ?.storedData
+  const countriesRecordCount = computed(() =>
+    selectedCountries.value.map((c) => getCountryRecordCount(c)),
+  )
+  const getDatasetRecordCount = (datasetId: number) => {
+    let records = 0
+    countriesRecordCount.value.forEach((country) => {
+      const c = country?.find((dataset) => dataset.datasetId === datasetId)
+      if (c?.recordCount) records += c?.recordCount
+    })
+    return records
+  }
 
   return {
     availableCountries,
+    countriesRecordCount,
     isLoadingCountries,
     selectedCountries,
     addCountry,
     filterCountry,
     getCountryFromCode,
+    getCountryRecordCount,
+    getDatasetRecordCount,
     updateCountries,
   }
 })
