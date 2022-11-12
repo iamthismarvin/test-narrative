@@ -18,12 +18,16 @@ export const useCountriesStore = defineStore('countries', () => {
   }
   const updateCountries = (countries: ICountry[]) =>
     (availableCountries.value = countries)
+  const getCountryFromCode = (countryCode: string) =>
+    availableCountries.value.find((c) => c.countryCode === countryCode)?.name ??
+    ''
 
   return {
     availableCountries,
     selectedCountries,
     addCountry,
     filterCountry,
+    getCountryFromCode,
     updateCountries,
   }
 })

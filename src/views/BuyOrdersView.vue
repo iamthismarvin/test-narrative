@@ -4,7 +4,7 @@
   <div v-else>
     <ResultsText
       :quantity="resultsQuantity"
-      :countries="resultsCountries"
+      :countries="selectedCountries"
       class="mb-2"
     />
     <BuyOrdersList v-if="buyOrdersData" :data="buyOrdersData" />
@@ -14,15 +14,19 @@
 
 <script setup lang="ts">
 import { computed, onBeforeMount, ref, type Ref } from 'vue'
+import { storeToRefs } from 'pinia'
 import BuyOrdersList from '@/components/BuyOrdersList.vue'
 import ResultsText from '@/components/ResultsText.vue'
 import type { IBuyOrder } from '@/utils/types'
 import { getBuyOrders } from '@/services/buy-orders'
+import { useCountriesStore } from '@/stores/countries'
 
 const isLoading = ref(false)
 const buyOrdersData: Ref<IBuyOrder[]> = ref([])
 const resultsQuantity = computed(() => buyOrdersData.value.length)
-const resultsCountries = ref(['United States', 'Canada', 'Mexico'])
+
+const countriesStore = useCountriesStore()
+const { selectedCountries } = storeToRefs(countriesStore)
 
 onBeforeMount(async () => {
   isLoading.value = true

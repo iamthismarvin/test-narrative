@@ -31,10 +31,10 @@ import { useCountriesStore } from '@/stores/countries'
 import { storeToRefs } from 'pinia'
 import { onBeforeMount } from 'vue'
 
-const store = useCountriesStore()
+const countriesStore = useCountriesStore()
 
-const { availableCountries, selectedCountries } = storeToRefs(store)
-const { addCountry, filterCountry, updateCountries } = store
+const { availableCountries, selectedCountries } = storeToRefs(countriesStore)
+const { addCountry, filterCountry, updateCountries } = countriesStore
 
 onBeforeMount(async () => {
   const data = await getCountries()
