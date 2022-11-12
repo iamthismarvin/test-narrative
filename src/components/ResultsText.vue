@@ -1,7 +1,7 @@
 <template>
   <p>
-    Showing <strong>{{ props.quantity }}</strong> from
-    <strong>{{ countriesFormatted }}</strong>
+    Showing <strong>{{ props.quantity }}</strong> results from
+    <strong>{{ countries.length ? countriesFormatted : '0 countries' }}</strong>
   </p>
 </template>
 

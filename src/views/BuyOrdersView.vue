@@ -7,13 +7,13 @@
       :countries="selectedCountries"
       class="mb-2"
     />
-    <BuyOrdersList v-if="buyOrdersData" :data="buyOrdersData" />
+    <BuyOrdersList v-if="buyOrdersData" :data="buyOrdersDataFiltered" />
     <div v-else>No buy orders found.</div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeMount, ref, type Ref } from 'vue'
+import { computed, onBeforeMount, ref, type ComputedRef, type Ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import BuyOrdersList from '@/components/BuyOrdersList.vue'
 import ResultsText from '@/components/ResultsText.vue'
@@ -23,7 +23,12 @@ import { useCountriesStore } from '@/stores/countries'
 
 const isLoading = ref(false)
 const buyOrdersData: Ref<IBuyOrder[]> = ref([])
-const resultsQuantity = computed(() => buyOrdersData.value.length)
+const buyOrdersDataFiltered: ComputedRef<IBuyOrder[]> = computed(() =>
+  buyOrdersData.value.filter((c) =>
+    c.countries.some((i) => selectedCountries.value.includes(i)),
+  ),
+)
+const resultsQuantity = computed(() => buyOrdersDataFiltered.value.length)
 
 const countriesStore = useCountriesStore()
 const { selectedCountries } = storeToRefs(countriesStore)
