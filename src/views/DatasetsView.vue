@@ -1,5 +1,5 @@
 <script setup lang="ts"></script>
 
 <template>
-  <main>Datasets</main>
+  <h1>Datasets</h1>
 </template>

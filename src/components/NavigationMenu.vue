@@ -11,12 +11,12 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
 
-interface INavigationLinks {
+interface INavigationLink {
   label: string
   path: string
 }
 
-const NAVIGATION_LINKS: INavigationLinks[] = [
+const NAVIGATION_LINKS: INavigationLink[] = [
   { label: 'Buy Orders', path: '/' },
   { label: 'Datasets', path: '/datasets' },
 ]
