@@ -1,10 +1,15 @@
 <template>
   <h1>Datasets</h1>
   <ResultsText :quantity="resultsQuantity" :countries="resultsCountries" />
-  <div>{{ datasets }}</div>
+  <ul class="grid grid-cols-2 gap-4">
+    <li v-for="dataset in datasets" :key="dataset.name">
+      <DatasetItem :data="dataset" />
+    </li>
+  </ul>
 </template>
 <script setup lang="ts">
 import { computed, reactive, ref } from 'vue'
+import DatasetItem from '@/components/DatasetItem.vue'
 import ResultsText from '@/components/ResultsText.vue'
 import type { IDatasetsApi } from '@/utils/types'
 

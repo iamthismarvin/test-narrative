@@ -11,12 +11,12 @@
 </template>
 
 <script setup lang="ts">
-import { computed, type ComputedRef } from 'vue'
+import { computed, type ComputedRef, type PropType } from 'vue'
 import BuyOrdersListItem from '@/components/BuyOrdersListItem.vue'
 import type { IBuyOrderApi, IBuyOrderListItem } from '@/utils/types'
 
 const props = defineProps({
-  data: { type: Object, required: true },
+  data: { type: Array as PropType<IBuyOrderApi[]>, required: true },
 })
 
 const buyOrdersFormatted: ComputedRef<IBuyOrderListItem[]> = computed(() =>

@@ -5,3 +5,11 @@
 h1 {
   @apply my-12 text-5xl text-center
 }
+
+h3 {
+  @apply font-bold text-2xl
+}
+
+h5 {
+  @apply font-bold text-lg underline
+}
