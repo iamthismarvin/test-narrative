@@ -2,10 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-* {
+button {
   @apply ease-in-out transition-all
 }
-
 
 h1 {
   @apply my-12 text-5xl text-center
