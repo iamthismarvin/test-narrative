@@ -4,7 +4,7 @@
   <div v-else>
     <ResultsText
       :quantity="resultsQuantity"
-      :countries="resultsCountries"
+      :countries="selectedCountries"
       class="mb-2"
     />
     <ul v-if="datasets" class="grid grid-cols-2 gap-4">
@@ -21,11 +21,13 @@ import DatasetItem from '@/components/DatasetItem.vue'
 import ResultsText from '@/components/ResultsText.vue'
 import type { IDataset } from '@/utils/types'
 import { getDatasets } from '@/services/datasets'
+import { useCountriesStore } from '@/stores/countries'
 
 const isLoading = ref(false)
 const datasets: Ref<IDataset[]> = ref([])
-const resultsCountries = ref(['United States', 'Canada'])
 const resultsQuantity = computed(() => datasets.value.length)
+
+const { selectedCountries } = useCountriesStore()
 
 onBeforeMount(async () => {
   isLoading.value = true
