@@ -12,3 +12,12 @@ export interface IBuyOrderListItem {
   date: string
   records: number
 }
+
+export interface IDatasetsApi {
+  id: number
+  name: string
+  label: string
+  description: string
+  thumbnailUrl: string
+  costPerRecord: number
+}

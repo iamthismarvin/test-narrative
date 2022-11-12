@@ -1,10 +1,7 @@
 <template>
   <h1>Your Buy Orders</h1>
   <div>
-    <p>
-      Showing <strong>{{ resultsQuantity }}</strong> from
-      <strong>{{ resultsCountriesFormatted }}</strong>
-    </p>
+    <ResultsText :quantity="resultsQuantity" :countries="resultsCountries" />
     <BuyOrdersList :data="buyOrdersData" />
   </div>
 </template>
@@ -12,16 +9,11 @@
 <script setup lang="ts">
 import { computed, reactive, ref } from 'vue'
 import BuyOrdersList from '@/components/BuyOrdersList.vue'
+import ResultsText from '@/components/ResultsText.vue'
 import type { IBuyOrderApi } from '@/utils/types'
 
 const resultsQuantity = computed(() => buyOrdersData.length)
 const resultsCountries = ref(['United States', 'Canada', 'Mexico'])
-
-const resultsCountriesFormatted = computed(() =>
-  resultsCountries.value.join(
-    resultsCountries.value.length === 2 ? ' & ' : ', ',
-  ),
-)
 
 const buyOrdersData: IBuyOrderApi[] = reactive([
   {
