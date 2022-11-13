@@ -31,3 +31,12 @@ export const putBuyOrder = async (order: IBuyOrder) => {
     console.log(err)
   }
 }
+
+export const deleteBuyOrder = async (id: string) => {
+  try {
+    const response = await api.delete(`buy-orders/${id}`)
+    return response
+  } catch (err) {
+    console.log(err)
+  }
+}

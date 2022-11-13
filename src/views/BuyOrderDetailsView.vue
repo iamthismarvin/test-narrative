@@ -88,7 +88,9 @@
             <button class="bg-purple-500 mr-4" @click="mode = 'edit'">
               Edit Order
             </button>
-            <button class="bg-red-500">Delete Order</button>
+            <button class="bg-red-500" @click="eraseBuyOrder">
+              Delete Order
+            </button>
           </div>
           <div v-if="mode === 'edit'">
             <button class="bg-green-500 mr-4" @click="updateBuyOrder">
@@ -107,8 +109,9 @@
 import { computed, onBeforeMount, reactive, ref, type Ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useCountriesStore } from '@/stores/countries'
-import { getBuyOrder, putBuyOrder } from '@/services/buy-orders'
+import { deleteBuyOrder, getBuyOrder, putBuyOrder } from '@/services/buy-orders'
 import { useDatasetsStore } from '@/stores/datasets'
+import router from '@/router'
 
 const props = defineProps({
   id: { type: String, required: true },
@@ -140,6 +143,11 @@ const updateBuyOrder = async () => {
   await putBuyOrder(buyOrderEditForm)
   buyOrderDetailsData.value = buyOrderEditForm
   mode.value = 'view'
+}
+
+const eraseBuyOrder = async () => {
+  await deleteBuyOrder(buyOrderDetailsData.value.id)
+  router.push('/buy-orders')
 }
 
 const toggleCountry = (countryCode: string) => {
