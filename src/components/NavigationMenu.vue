@@ -17,7 +17,7 @@ interface INavigationLink {
 }
 
 const NAVIGATION_LINKS: INavigationLink[] = [
-  { label: 'Buy Orders', path: '/' },
+  { label: 'Buy Orders', path: '/buy-orders' },
   { label: 'Datasets', path: '/datasets' },
 ]
 </script>

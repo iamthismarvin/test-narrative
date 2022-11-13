@@ -1,11 +1,13 @@
 <template>
   <ul>
     <li
-      v-for="{ name, date, records } in buyOrdersFormatted"
+      v-for="{ id, name, date, records } in buyOrdersFormatted"
       :key="name"
       class="mb-2"
     >
-      <BuyOrdersListItem :name="name" :date="date" :records="records" />
+      <RouterLink :to="{ name: 'buy-order', params: { id } }">
+        <BuyOrdersListItem :name="name" :date="date" :records="records" />
+      </RouterLink>
     </li>
   </ul>
 </template>
@@ -21,6 +23,7 @@ const props = defineProps({
 
 const buyOrdersFormatted: ComputedRef<IBuyOrderListItem[]> = computed(() =>
   props.data.map((buyOrder: IBuyOrder) => ({
+    id: buyOrder.id,
     name: buyOrder.name,
     date: buyOrder.createdAt,
     records: buyOrder.budget,

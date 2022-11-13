@@ -6,9 +6,20 @@ const router = createRouter({
   routes: [
     {
       path: '/',
+      redirect: 'buy-orders',
+    },
+    {
+      path: '/buy-orders',
       name: 'buy-orders',
       component: () => import('@/views/BuyOrdersView.vue'),
       meta: { layout: UserLayout },
+    },
+    {
+      path: '/buy-orders/:id',
+      name: 'buy-order',
+      component: () => import('@/views/BuyOrderDetailsView.vue'),
+      meta: { layout: UserLayout },
+      props: true,
     },
     {
       path: '/datasets',

@@ -13,7 +13,6 @@
         >
           <button
             @click="filterCountry(countryCode)"
-            class="p-3 rounded-xl w-40"
             :class="[
               selectedCountries.includes(countryCode)
                 ? 'bg-blue-500 text-white'

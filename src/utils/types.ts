@@ -8,6 +8,7 @@ export interface IBuyOrder {
 }
 
 export interface IBuyOrderListItem {
+  id: string
   name: string
   date: string
   records: number
