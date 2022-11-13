@@ -112,6 +112,7 @@ import { useCountriesStore } from '@/stores/countries'
 import { deleteBuyOrder, getBuyOrder, putBuyOrder } from '@/services/buy-orders'
 import { useDatasetsStore } from '@/stores/datasets'
 import router from '@/router'
+import type { IBuyOrder } from '@/utils/types'
 
 const props = defineProps({
   id: { type: String, required: true },
@@ -119,7 +120,7 @@ const props = defineProps({
 
 const isLoading = ref(false)
 const buyOrderDetailsData = ref()
-const buyOrderEditForm = reactive({
+const buyOrderEditForm: IBuyOrder = reactive({
   id: '',
   createdAt: '',
   name: '',
