@@ -1,21 +1,25 @@
 <template>
-  <h1>Your Buy Orders</h1>
-  <div v-if="isLoading">Loading buy orders...</div>
-  <div v-else>
-    <ResultsText
-      :quantity="resultsQuantity"
-      :countries="selectedCountries"
-      class="mb-2"
-    />
-    <BuyOrdersList v-if="buyOrdersData" :data="buyOrdersDataFiltered" />
-    <div v-else>No buy orders found.</div>
+  <div class="pb-36">
+    <h1>Your Buy Orders</h1>
+    <div v-if="isLoading">Loading buy orders...</div>
+    <div v-else>
+      <ResultsText
+        :quantity="resultsQuantity"
+        :countries="selectedCountries"
+        class="mb-2"
+      />
+      <BuyOrdersList v-if="buyOrdersData" :data="buyOrdersDataFiltered" />
+      <div v-else>No buy orders found.</div>
+    </div>
   </div>
+  <CountryFilter />
 </template>
 
 <script setup lang="ts">
 import { computed, onBeforeMount, ref, type ComputedRef, type Ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import BuyOrdersList from '@/components/BuyOrdersList.vue'
+import CountryFilter from '@/components/CountryFilter.vue'
 import ResultsText from '@/components/ResultsText.vue'
 import type { IBuyOrder } from '@/utils/types'
 import { getBuyOrders } from '@/services/buy-orders'
