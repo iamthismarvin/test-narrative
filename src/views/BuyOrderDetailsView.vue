@@ -7,15 +7,15 @@
         <section class="grid grid-cols-2 gap-4 mb-6">
           <div>
             <h5>Order Name:</h5>
-            <p>EXAMPLE</p>
+            <p>{{ buyOrderDetailsData.name }}</p>
           </div>
           <div>
             <h5>Date Created:</h5>
-            <p>EXAMPLE</p>
+            <p>{{ buyOrderDetailsData.createdAt }}</p>
           </div>
           <div>
             <h5>Order Budget:</h5>
-            <p>EXAMPLE</p>
+            <p>{{ buyOrderDetailsData.budget }}</p>
           </div>
           <div>
             <h5>Forecasted Records:</h5>
@@ -27,7 +27,12 @@
           <button
             v-for="{ countryCode, name } in availableCountries"
             :key="countryCode"
-            class="bg-blue-500 text-white mr-4"
+            class="mr-4"
+            :class="[
+              buyOrderDetailsData.countries.includes(countryCode)
+                ? 'bg-blue-500 text-white '
+                : 'bg-gray-200',
+            ]"
           >
             {{ name }}
           </button>
@@ -35,12 +40,34 @@
         <section class="mb-6">
           <h5 class="mb-4">Included Datasets:</h5>
           <div class="grid grid-cols-2 gap-4">
-            <div class="bg-white rounded-xl shadow p-5 h-24">Weather Data</div>
-            <div class="bg-gray-200 rounded-xl shadow p-5 h-24">
-              Weather Data
+            <div
+              v-for="{
+                id,
+                name,
+                label,
+                thumbnailUrl,
+                costPerRecord,
+              } in availableDatasets"
+              :key="name"
+              class="rounded-xl shadow p-5 h-28"
+              :class="[
+                buyOrderDetailsData.datasetIds.includes(id)
+                  ? 'bg-white'
+                  : 'bg-gray-200',
+              ]"
+            >
+              <div class="flex h-full items-center">
+                <img
+                  :src="thumbnailUrl"
+                  alt="name"
+                  class="bg-blue-300 h-16 mr-4 w-16 min-w-[4rem]"
+                />
+                <div class="h-full">
+                  <h3>{{ label }}</h3>
+                  <p>${{ costPerRecord }} per record</p>
+                </div>
+              </div>
             </div>
-            <div class="bg-white rounded-xl shadow p-5 h-24">Weather Data</div>
-            <div class="bg-white rounded-xl shadow p-5 h-24">Weather Data</div>
           </div>
         </section>
         <section class="flex justify-center text-white">
@@ -54,24 +81,33 @@
 </template>
 
 <script setup lang="ts">
-import { useCountriesStore } from '@/stores/countries'
-import { storeToRefs } from 'pinia'
 import { onBeforeMount, ref } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useCountriesStore } from '@/stores/countries'
+import { getBuyOrder } from '@/services/buy-orders'
+import { useDatasetsStore } from '@/stores/datasets'
 
 const props = defineProps({
   id: { type: String, required: true },
 })
 
 const isLoading = ref(false)
-const buyOrderDetailsData = ref(true)
+const buyOrderDetailsData = ref()
 
 const countriesStore = useCountriesStore()
 const { availableCountries } = storeToRefs(countriesStore)
+const { updateCountries } = countriesStore
 
-onBeforeMount(() => {
+const datasetsStore = useDatasetsStore()
+const { availableDatasets } = storeToRefs(datasetsStore)
+const { updateDatasets } = datasetsStore
+
+onBeforeMount(async () => {
   isLoading.value = true
-  // const data = getBuyOrderDetailsData()
-  // if (data) buyOrderDetailsData.value = data
+  if (!availableCountries.value.length) await updateCountries()
+  if (!availableDatasets.value.length) await updateDatasets()
+  const data = await getBuyOrder(props.id)
+  if (data) buyOrderDetailsData.value = data
   isLoading.value = false
 })
 </script>

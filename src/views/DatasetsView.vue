@@ -24,8 +24,9 @@ import CountryFilter from '@/components/CountryFilter.vue'
 import DatasetItem from '@/components/DatasetItem.vue'
 import ResultsText from '@/components/ResultsText.vue'
 import type { IDataset } from '@/utils/types'
-import { getDatasets } from '@/services/datasets'
 import { useCountriesStore } from '@/stores/countries'
+import { useDatasetsStore } from '@/stores/datasets'
+import { storeToRefs } from 'pinia'
 
 const isLoading = ref(false)
 const datasets: Ref<IDataset[]> = ref([])
@@ -33,10 +34,14 @@ const resultsQuantity = computed(() => datasets.value.length)
 
 const { selectedCountries } = useCountriesStore()
 
+const datasetsStore = useDatasetsStore()
+const { availableDatasets } = storeToRefs(datasetsStore)
+const { updateDatasets } = datasetsStore
+
 onBeforeMount(async () => {
   isLoading.value = true
-  const data = await getDatasets()
-  if (data) datasets.value = data
+  if (!availableDatasets.value.length) await updateDatasets()
+  datasets.value = availableDatasets.value
   isLoading.value = false
 })
 </script>

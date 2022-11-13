@@ -34,14 +34,6 @@ export const useCountriesStore = defineStore('countries', () => {
   const countriesRecordCount = computed(() =>
     selectedCountries.value.map((c) => getCountryRecordCount(c)),
   )
-  const getDatasetRecordCount = (datasetId: number) => {
-    let records = 0
-    countriesRecordCount.value.forEach((country) => {
-      const c = country?.find((dataset) => dataset.datasetId === datasetId)
-      if (c?.recordCount) records += c?.recordCount
-    })
-    return records
-  }
 
   return {
     availableCountries,
@@ -52,7 +44,6 @@ export const useCountriesStore = defineStore('countries', () => {
     filterCountry,
     getCountryFromCode,
     getCountryRecordCount,
-    getDatasetRecordCount,
     updateCountries,
   }
 })

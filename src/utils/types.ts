@@ -32,3 +32,4 @@ export interface IDataset {
 export type BuyOrdersResponse = IBuyOrder[] | undefined
 export type CountriesResponse = ICountry[] | undefined
 export type DatasetsResponse = IDataset[] | undefined
+export type BuyOrderGetResponse = IBuyOrder | undefined
