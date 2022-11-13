@@ -12,7 +12,7 @@
           class="mr-4"
         >
           <button
-            @click="filterCountry(countryCode)"
+            @click="filterCountry(countryCode, selectedCountries)"
             :class="[
               selectedCountries.includes(countryCode)
                 ? 'bg-blue-500 text-white'
@@ -45,7 +45,7 @@ onBeforeMount(async () => {
   // Populate available countries on first load.
   if (!selectedCountries.value.length)
     availableCountries.value.forEach(({ countryCode }) =>
-      addCountry(countryCode),
+      addCountry(countryCode, selectedCountries.value),
     )
 })
 </script>

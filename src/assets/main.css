@@ -6,6 +6,10 @@ button {
   @apply ease-in-out p-3 rounded-xl transition-all w-40
 }
 
+input {
+  @apply border border-gray-300 p-2 rounded-xl 
+}
+
 h1 {
   @apply my-12 text-5xl text-center
 }
@@ -15,5 +19,5 @@ h3 {
 }
 
 h5 {
-  @apply font-bold text-lg underline
+  @apply font-bold mb-1 text-lg underline
 }

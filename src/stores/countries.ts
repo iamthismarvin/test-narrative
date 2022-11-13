@@ -8,16 +8,16 @@ export const useCountriesStore = defineStore('countries', () => {
   const isLoadingCountries = ref(false)
   const selectedCountries: Ref<string[]> = ref([])
 
-  const addCountry = (countryCode: string) =>
-    selectedCountries.value.push(countryCode)
-  const removeCountry = (countryCode: string) => {
-    const countryIndex = selectedCountries.value.indexOf(countryCode)
-    selectedCountries.value.splice(countryIndex, 1)
+  const addCountry = (countryCode: string, list: string[]) =>
+    list.push(countryCode)
+  const removeCountry = (countryCode: string, list: string[]) => {
+    const countryIndex = list.indexOf(countryCode)
+    list.splice(countryIndex, 1)
   }
-  const filterCountry = (countryCode: string) => {
-    const isCountrySelected = selectedCountries.value.includes(countryCode)
-    if (isCountrySelected) removeCountry(countryCode)
-    else addCountry(countryCode)
+  const filterCountry = (countryCode: string, list: string[]) => {
+    const isCountrySelected = list.includes(countryCode)
+    if (isCountrySelected) removeCountry(countryCode, selectedCountries.value)
+    else addCountry(countryCode, selectedCountries.value)
   }
   const updateCountries = async () => {
     isLoadingCountries.value = true
@@ -42,6 +42,7 @@ export const useCountriesStore = defineStore('countries', () => {
     selectedCountries,
     addCountry,
     filterCountry,
+    removeCountry,
     getCountryFromCode,
     getCountryRecordCount,
     updateCountries,

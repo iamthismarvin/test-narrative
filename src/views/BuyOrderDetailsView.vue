@@ -7,7 +7,8 @@
         <section class="grid grid-cols-2 gap-4 mb-6">
           <div>
             <h5>Order Name:</h5>
-            <p>{{ buyOrderDetailsData.name }}</p>
+            <p v-if="mode === 'view'">{{ buyOrderDetailsData.name }}</p>
+            <input v-else v-model="buyOrderEditForm.name" />
           </div>
           <div>
             <h5>Date Created:</h5>
@@ -17,7 +18,8 @@
           </div>
           <div>
             <h5>Order Budget:</h5>
-            <p>{{ buyOrderDetailsData.budget }}</p>
+            <p v-if="mode === 'view'">{{ buyOrderDetailsData.budget }}</p>
+            <input v-else v-model="buyOrderEditForm.budget" />
           </div>
           <div>
             <h5>Forecasted Records:</h5>
@@ -26,7 +28,13 @@
         </section>
         <section class="mb-6">
           <h5 class="mb-2">Included Countries:</h5>
+          <ul v-if="mode === 'view'">
+            <li v-for="country in buyOrderDetailsData.countries" :key="country">
+              {{ getCountryFromCode(country) }}
+            </li>
+          </ul>
           <button
+            v-else
             v-for="{ countryCode, name } in availableCountries"
             :key="countryCode"
             class="mr-4"
@@ -35,6 +43,7 @@
                 ? 'bg-blue-500 text-white '
                 : 'bg-gray-200',
             ]"
+            @click="toggleCountry(countryCode)"
           >
             {{ name }}
           </button>
@@ -49,14 +58,16 @@
                 label,
                 thumbnailUrl,
                 costPerRecord,
-              } in availableDatasets"
+              } in mode === 'view' ? buyOrderDatasets : availableDatasets"
               :key="name"
               class="rounded-xl shadow p-5 h-28"
               :class="[
                 buyOrderDetailsData.datasetIds.includes(id)
                   ? 'bg-white'
                   : 'bg-gray-200',
+                { 'cursor-pointer': mode !== 'view' },
               ]"
+              @click="toggleDataset(id)"
             >
               <div class="flex h-full items-center">
                 <img
@@ -73,8 +84,18 @@
           </div>
         </section>
         <section class="flex justify-center text-white">
-          <button class="bg-purple-500 mr-4">Edit Order</button>
-          <button class="bg-red-500">Delete Order</button>
+          <div v-if="mode === 'view'">
+            <button class="bg-purple-500 mr-4" @click="mode = 'edit'">
+              Edit Order
+            </button>
+            <button class="bg-red-500">Delete Order</button>
+          </div>
+          <div v-if="mode === 'edit'">
+            <button class="bg-green-500 mr-4" @click="updateBuyOrder">
+              Save
+            </button>
+            <button class="bg-blue-500" @click="mode = 'view'">Cancel</button>
+          </div>
         </section>
       </div>
       <p v-else>No buy order details found.</p>
@@ -83,10 +104,10 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, ref } from 'vue'
+import { computed, onBeforeMount, reactive, ref, type Ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useCountriesStore } from '@/stores/countries'
-import { getBuyOrder } from '@/services/buy-orders'
+import { getBuyOrder, putBuyOrder } from '@/services/buy-orders'
 import { useDatasetsStore } from '@/stores/datasets'
 
 const props = defineProps({
@@ -95,10 +116,58 @@ const props = defineProps({
 
 const isLoading = ref(false)
 const buyOrderDetailsData = ref()
+const buyOrderEditForm = reactive({
+  id: '',
+  createdAt: '',
+  name: '',
+  budget: 0,
+  datasetIds: [],
+  countries: [],
+})
+
+const mode: Ref<'view' | 'edit'> = ref('view')
+
+const fillEditForm = () => {
+  buyOrderEditForm.name = buyOrderDetailsData.value.name
+  buyOrderEditForm.budget = buyOrderDetailsData.value.budget
+  buyOrderEditForm.datasetIds = buyOrderDetailsData.value.datasetIds
+  buyOrderEditForm.countries = buyOrderDetailsData.value.countries
+}
+
+const updateBuyOrder = async () => {
+  buyOrderEditForm.id = buyOrderDetailsData.value.id
+  buyOrderEditForm.createdAt = buyOrderDetailsData.value.createdAt
+  await putBuyOrder(buyOrderEditForm)
+  buyOrderDetailsData.value = buyOrderEditForm
+  mode.value = 'view'
+}
+
+const toggleCountry = (countryCode: string) => {
+  const isCountrySelected = buyOrderEditForm.countries.includes(countryCode)
+  if (isCountrySelected) removeCountry(countryCode, buyOrderEditForm.countries)
+  else addCountry(countryCode, buyOrderEditForm.countries)
+}
+
+const toggleDataset = (datasetId: number) => {
+  if (mode.value === 'view') return
+  const isDatasetSelected = buyOrderEditForm.datasetIds.includes(datasetId)
+  if (isDatasetSelected) {
+    const datasetIndex = buyOrderEditForm.datasetIds.indexOf(datasetId)
+    buyOrderEditForm.datasetIds.splice(datasetIndex, 1)
+  } else buyOrderEditForm.datasetIds.push(datasetId)
+}
+
+const buyOrderDatasets = computed(() =>
+  availableDatasets.value.filter(
+    (dataset) =>
+      buyOrderDetailsData.value.datasetIds.includes(dataset.id) && dataset,
+  ),
+)
 
 const countriesStore = useCountriesStore()
 const { availableCountries } = storeToRefs(countriesStore)
-const { updateCountries } = countriesStore
+const { addCountry, getCountryFromCode, removeCountry, updateCountries } =
+  countriesStore
 
 const datasetsStore = useDatasetsStore()
 const { availableDatasets } = storeToRefs(datasetsStore)
@@ -111,5 +180,6 @@ onBeforeMount(async () => {
   const data = await getBuyOrder(props.id)
   if (data) buyOrderDetailsData.value = data
   isLoading.value = false
+  fillEditForm()
 })
 </script>
