@@ -6,7 +6,7 @@
     </div>
     <div>
       <h5>Date Created</h5>
-      <p>{{ props.date }}</p>
+      <p>{{ new Date(props.date).toLocaleDateString() }}</p>
     </div>
     <div>
       <h5>Forecasted Records</h5>

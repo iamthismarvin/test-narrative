@@ -11,7 +11,9 @@
           </div>
           <div>
             <h5>Date Created:</h5>
-            <p>{{ buyOrderDetailsData.createdAt }}</p>
+            <p>
+              {{ new Date(buyOrderDetailsData.createdAt).toLocaleDateString() }}
+            </p>
           </div>
           <div>
             <h5>Order Budget:</h5>
