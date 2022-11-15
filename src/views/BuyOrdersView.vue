@@ -3,11 +3,15 @@
     <h1>Your Buy Orders</h1>
     <div v-if="isLoading">Loading buy orders...</div>
     <div v-else>
-      <ResultsText
-        :quantity="resultsQuantity"
-        :countries="selectedCountries"
-        class="mb-2"
-      />
+      <div class="flex items-end justify-between mb-2">
+        <ResultsText
+          :quantity="resultsQuantity"
+          :countries="selectedCountries"
+        />
+        <button @click="addBuyOrder" class="bg-green-500 mt-6 text-white">
+          Add Buy Order
+        </button>
+      </div>
       <BuyOrdersList v-if="buyOrdersData" :data="buyOrdersDataFiltered" />
       <div v-else>No buy orders found.</div>
     </div>
@@ -24,6 +28,7 @@ import ResultsText from '@/components/ResultsText.vue'
 import type { IBuyOrder } from '@/utils/types'
 import { getBuyOrders } from '@/services/buy-orders'
 import { useCountriesStore } from '@/stores/countries'
+import router from '@/router'
 
 const isLoading = ref(false)
 const buyOrdersData: Ref<IBuyOrder[]> = ref([])
@@ -36,6 +41,7 @@ const resultsQuantity = computed(() => buyOrdersDataFiltered.value.length)
 
 const countriesStore = useCountriesStore()
 const { selectedCountries } = storeToRefs(countriesStore)
+const addBuyOrder = () => router.push('/buy-orders/new')
 
 onBeforeMount(async () => {
   isLoading.value = true

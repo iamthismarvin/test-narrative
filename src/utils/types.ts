@@ -1,10 +1,13 @@
-export interface IBuyOrder {
-  id: string
+export interface IBuyOrderBody {
   name: string
   createdAt: string
   datasetIds: number[]
   countries: string[]
   budget: number
+}
+
+export interface IBuyOrder extends IBuyOrderBody {
+  id: string
 }
 
 export interface IBuyOrderListItem {

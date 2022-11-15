@@ -3,6 +3,7 @@ import type {
   BuyOrdersResponse,
   BuyOrderGetResponse,
   IBuyOrder,
+  IBuyOrderBody,
 } from '@/utils/types'
 
 export const getBuyOrders = async () => {
@@ -35,6 +36,15 @@ export const putBuyOrder = async (order: IBuyOrder) => {
 export const deleteBuyOrder = async (id: string) => {
   try {
     const response = await api.delete(`buy-orders/${id}`)
+    return response
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+export const postBuyOrder = async (order: IBuyOrderBody) => {
+  try {
+    const response = await api.post(`buy-orders`, order)
     return response
   } catch (err) {
     console.log(err)

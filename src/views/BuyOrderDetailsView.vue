@@ -3,7 +3,7 @@
     <h1>Buy Order Details</h1>
     <p v-if="isLoading">Loading buy order details...</p>
     <div v-else class="bg-white p-5 rounded-xl shadow">
-      <div v-if="buyOrderDetailsData">
+      <div v-if="buyOrderDetailsData || mode === 'new'">
         <section class="grid grid-cols-2 gap-4 mb-6">
           <div>
             <h5>Order Name:</h5>
@@ -13,13 +13,17 @@
           <div>
             <h5>Date Created:</h5>
             <p>
-              {{ new Date(buyOrderDetailsData.createdAt).toLocaleDateString() }}
+              {{
+                mode === 'new'
+                  ? new Date().toLocaleDateString()
+                  : new Date(buyOrderDetailsData.createdAt).toLocaleDateString()
+              }}
             </p>
           </div>
           <div>
             <h5>Order Budget:</h5>
             <p v-if="mode === 'view'">{{ buyOrderDetailsData.budget }}</p>
-            <input v-else v-model="buyOrderEditForm.budget" />
+            <input v-else v-model="buyOrderEditForm.budget" type="number" />
           </div>
           <div>
             <h5>Forecasted Records:</h5>
@@ -39,7 +43,7 @@
             :key="countryCode"
             class="mr-4"
             :class="[
-              buyOrderDetailsData.countries.includes(countryCode)
+              buyOrderEditForm.countries.includes(countryCode)
                 ? 'bg-blue-500 text-white '
                 : 'bg-gray-200',
             ]"
@@ -62,7 +66,7 @@
               :key="name"
               class="rounded-xl shadow p-5 h-28"
               :class="[
-                buyOrderDetailsData.datasetIds.includes(id)
+                buyOrderEditForm.datasetIds.includes(id)
                   ? 'bg-white'
                   : 'bg-gray-200',
                 { 'cursor-pointer': mode !== 'view' },
@@ -92,11 +96,22 @@
               Delete Order
             </button>
           </div>
-          <div v-if="mode === 'edit'">
-            <button class="bg-green-500 mr-4" @click="updateBuyOrder">
+          <div v-else>
+            <button
+              v-if="mode === 'edit'"
+              class="bg-green-500 mr-4"
+              @click="updateBuyOrder"
+            >
               Save
             </button>
-            <button class="bg-blue-500" @click="mode = 'view'">Cancel</button>
+            <button
+              v-if="mode === 'new'"
+              class="bg-green-500 mr-4"
+              @click="createBuyOrder"
+            >
+              Submit
+            </button>
+            <button class="bg-blue-500" @click="cancelBuyOrder">Cancel</button>
           </div>
         </section>
       </div>
@@ -109,7 +124,12 @@
 import { computed, onBeforeMount, reactive, ref, type Ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useCountriesStore } from '@/stores/countries'
-import { deleteBuyOrder, getBuyOrder, putBuyOrder } from '@/services/buy-orders'
+import {
+  deleteBuyOrder,
+  getBuyOrder,
+  postBuyOrder,
+  putBuyOrder,
+} from '@/services/buy-orders'
 import { useDatasetsStore } from '@/stores/datasets'
 import router from '@/router'
 import type { IBuyOrder } from '@/utils/types'
@@ -129,7 +149,7 @@ const buyOrderEditForm: IBuyOrder = reactive({
   countries: [],
 })
 
-const mode: Ref<'view' | 'edit'> = ref('view')
+const mode: Ref<'view' | 'edit' | 'new'> = ref('view')
 
 const fillEditForm = () => {
   buyOrderEditForm.name = buyOrderDetailsData.value.name
@@ -149,6 +169,16 @@ const updateBuyOrder = async () => {
 const eraseBuyOrder = async () => {
   await deleteBuyOrder(buyOrderDetailsData.value.id)
   router.push('/buy-orders')
+}
+
+const createBuyOrder = async () => {
+  buyOrderEditForm.createdAt = new Date().toString()
+  await postBuyOrder(buyOrderEditForm)
+  router.push('/buy-orders')
+}
+
+const cancelBuyOrder = () => {
+  mode.value === 'edit' ? (mode.value = 'view') : router.push('/buy-orders')
 }
 
 const toggleCountry = (countryCode: string) => {
@@ -186,8 +216,11 @@ onBeforeMount(async () => {
   isLoading.value = true
   if (!availableCountries.value.length) await updateCountries()
   if (!availableDatasets.value.length) await updateDatasets()
-  const data = await getBuyOrder(props.id)
-  if (data) buyOrderDetailsData.value = data
+  if (props.id === 'new') mode.value = 'new'
+  else {
+    const data = await getBuyOrder(props.id)
+    if (data) buyOrderDetailsData.value = data
+  }
   isLoading.value = false
   fillEditForm()
 })
